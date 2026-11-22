@@ -38,6 +38,10 @@ Copy `.env.example` to `.env`:
 cp .env.example .env
 ```
 
+Adjust the credentials or secrets if needed. By default, an Owner account is seeded on first startup:
+- **Email**: `owner@construction-mgmt.local`
+- **Password**: `Owner@123456`
+
 ### 2. Start PostgreSQL 16 Database
 
 Launch the isolated PostgreSQL 16 database container from `infra/`:
@@ -92,15 +96,37 @@ The server starts on port `8080` by default.
 
 ---
 
-## API Endpoints & Documentation
+## Authentication & API Endpoints
 
+### Public Endpoints:
 - **Health Check**:
   - `GET http://localhost:8080/api/health`
-  - Returns service status, timestamp, and database connectivity.
-- **Swagger UI (OpenAPI 3.0)**:
+- **Login**:
+  - `POST http://localhost:8080/api/auth/login`
+  - Body:
+    ```json
+    {
+      "email": "owner@construction-mgmt.local",
+      "password": "Owner@123456"
+    }
+    ```
+  - Returns `accessToken`, `refreshToken`, `tokenType` ("Bearer"), `expiresIn`, `user` info.
+- **Refresh Token**:
+  - `POST http://localhost:8080/api/auth/refresh`
+  - Body:
+    ```json
+    {
+      "refreshToken": "<YOUR_REFRESH_TOKEN>"
+    }
+    ```
+  - Returns fresh `accessToken` and rotated `refreshToken`.
+- **Swagger UI (OpenAPI 3.0 with Bearer JWT Auth)**:
   - `http://localhost:8080/swagger-ui.html`
 - **OpenAPI JSON Spec**:
   - `http://localhost:8080/v3/api-docs`
+
+### Protected Endpoints:
+- All other `/api/**` endpoints require `Authorization: Bearer <accessToken>`.
 
 ---
 

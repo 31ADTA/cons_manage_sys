@@ -34,6 +34,17 @@ spring:
 server:
   port: ${SERVER_PORT:8080}
 
+# Application & Security Configuration
+app:
+  jwt:
+    secret: ${JWT_SECRET:404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970}
+    access-token-expiration-ms: ${JWT_ACCESS_TOKEN_EXPIRATION_MS:900000}       # 15 minutes
+    refresh-token-expiration-ms: ${JWT_REFRESH_TOKEN_EXPIRATION_MS:604800000} # 7 days
+  owner:
+    email: ${APP_OWNER_EMAIL:owner@construction-mgmt.local}
+    password: ${APP_OWNER_PASSWORD:Owner@123456}
+    name: ${APP_OWNER_NAME:System Owner}
+
 # Springdoc OpenAPI / Swagger UI
 springdoc:
   api-docs:
