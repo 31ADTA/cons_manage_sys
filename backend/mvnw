@@ -5,16 +5,6 @@
 
 set -e
 
-# OS specific support.
-cygwin=false
-darwin=false
-mingw=false
-case "`uname`" in
-  CYGWIN*) cygwin=true ;;
-  Darwin*) darwin=true ;;
-  MINGW*)  mingw=true ;;
-esac
-
 PRG="$0"
 while [ -h "$PRG" ] ; do
   ls=`ls -ld "$PRG"`
@@ -28,13 +18,11 @@ done
 BASE_DIR=`dirname "$PRG"`
 
 if [ -z "$JAVA_HOME" ]; then
-  if $darwin; then
-    if [ -x '/usr/libexec/java_home' ]; then
-      JAVA_HOME=`/usr/libexec/java_home 2>/dev/null || true`
-    fi
-    if [ -z "$JAVA_HOME" ] && [ -d "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home" ]; then
-      JAVA_HOME="/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home"
-    fi
+  if [ -x '/usr/libexec/java_home' ]; then
+    JAVA_HOME=`/usr/libexec/java_home 2>/dev/null || true`
+  fi
+  if [ -z "$JAVA_HOME" ] && [ -d "/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home" ]; then
+    JAVA_HOME="/Library/Java/JavaVirtualMachines/temurin-21.jdk/Contents/Home"
   fi
 fi
 
@@ -78,6 +66,7 @@ fi
 
 exec "$JAVACMD" \
   $MAVEN_OPTS \
-  -jar "$WRAPPER_JAR" \
+  -classpath "$WRAPPER_JAR" \
   "-Dmaven.multiModuleProjectDirectory=$BASE_DIR" \
+  org.apache.maven.wrapper.MavenWrapperMain \
   "$@"

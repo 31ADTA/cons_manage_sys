@@ -16,7 +16,7 @@ if not exist "%WRAPPER_JAR%" (
 )
 
 if exist "%WRAPPER_JAR%" (
-    java %MAVEN_OPTS% -jar "%WRAPPER_JAR%" "-Dmaven.multiModuleProjectDirectory=%BASE_DIR%" %*
+    java %MAVEN_OPTS% -classpath "%WRAPPER_JAR%" "-Dmaven.multiModuleProjectDirectory=%BASE_DIR%" org.apache.maven.wrapper.MavenWrapperMain %*
 ) else (
     mvn %*
 )
